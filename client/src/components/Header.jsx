@@ -4,7 +4,7 @@ import { useState } from "react"
 import { Menu, X } from "lucide-react"
 import Logo from "./Logo"
 
-const Header = ({ toggleLoginModal }) => {
+const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => {
@@ -56,7 +56,7 @@ const Header = ({ toggleLoginModal }) => {
           </div>
 
           <button
-            onClick={toggleLoginModal}
+           
             className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-6 py-2 rounded-full transition-colors"
           >
             Log In
@@ -99,7 +99,7 @@ const Header = ({ toggleLoginModal }) => {
               </div>
 
               <button
-                onClick={toggleLoginModal}
+                onClick={() => {}}
                 className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-6 py-2 rounded-full transition-colors"
               >
                 Log In
