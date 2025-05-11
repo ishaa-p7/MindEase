@@ -10,14 +10,15 @@ import Quiz from './pages/Quiz'
 import Relax from './pages/Relax'
 import Sign_in from './pages/Sign_in'
 import Sign_up from './pages/Sign_up'
+import Header from './components/Header'
+import Footer from './components/Footer'
 
 
 
 function App() {
   return (
    <BrowserRouter>
-   
-   
+   <Header/>
    <Routes>
     <Route path="/" element={<Home/>}/>
     <Route path="/about" element={<About/>}/>
@@ -31,7 +32,8 @@ function App() {
     <Route path="/quiz" element={<Quiz/>}/>
     <Route path="/relax" element={<Relax/>}/>
    </Routes>
-   
+  
+  <Footer/>
    </BrowserRouter>
   )
 }
