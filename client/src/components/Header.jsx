@@ -1,7 +1,8 @@
 "use client"
 
 import { useState } from "react"
-import { Menu, X } from "lucide-react"
+import {  Menu, X } from "lucide-react"
+import {Link} from 'react-router-dom';
 import Logo from "./Logo"
 
 const Header = () => {
@@ -23,35 +24,35 @@ const Header = () => {
 
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          <a href="#" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
+          <Link to="/" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
             Home
-          </a>
-          <a href="#mood-tracker" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
+          </Link>
+          <Link to="/mood-tracker" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
             Mood Tracker
-          </a>
-          <a href="#chatbot" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
+          </Link>
+          <Link to="/chatbot" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
             AI Chatbot
-          </a>
-          <a href="#quiz" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
+          </Link>
+          <Link to="/quiz" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
             Quiz
-          </a>
-          <a href="#support" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
+          </Link>
+          <Link href="/help" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
             Help Support
-          </a>
+          </Link>
 
           {/* Fun dropdown */}
           <div className="relative group">
             <button className="text-gray-700 hover:text-[#FF8E7E] transition-colors">Fun</button>
             <div className="absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200">
-              <a href="#memes" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#FFF5F1]">
+              <Link to="/meme-generator" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#FFF5F1]">
                 Meme Generator
-              </a>
-              <a href="#relax" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#FFF5F1]">
+              </Link>
+              <Link to="/relax" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#FFF5F1]">
                 Relax
-              </a>
-              <a href="#groups" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#FFF5F1]">
+              </Link>
+              <Link to="/groups" className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#FFF5F1]">
                 Groups
-              </a>
+              </Link>
             </div>
           </div>
 
