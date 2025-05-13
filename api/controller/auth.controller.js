@@ -50,6 +50,7 @@ export const signIn = async (req, res) => {
 
     res.status(200).json({ message: "Login successful", token ,
        user: {
+         _id: user._id,
     email: user.email, // 👈 Add any other fields you want to expose
     name: user.name,   // optional
     

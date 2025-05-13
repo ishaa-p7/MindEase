@@ -29,6 +29,7 @@ export default function SignIn() {
  localStorage.setItem("user", JSON.stringify({ email: data.user.email }));
   // Optionally save token too
   localStorage.setItem("token", data.token);
+   localStorage.setItem("userId", data.user._id);
   window.dispatchEvent(new Event("user-login"));
         navigate("/");
       } else {

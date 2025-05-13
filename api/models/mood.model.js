@@ -1,23 +1,21 @@
 import mongoose from 'mongoose';
 
 const moodSchema = new mongoose.Schema({
-  user: {
+  mood: {
+    type: String,
+    required: true,
+  },
+  date: {
+    type: Date,
+    default: Date.now,
+  },
+  userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User',
     required: true,
   },
-  mood: {
-    type: String,
-    required: true,
-    enum: ['happy', 'sad', 'angry', 'anxious', 'excited', 'neutral'],
-  },
-  note: {
-    type: String,
-  },
-}, {
-  timestamps: true  // ✅ This adds createdAt and updatedAt automatically
 });
 
 const Mood = mongoose.model('Mood', moodSchema);
-export default Mood;
 
+export default Mood;
