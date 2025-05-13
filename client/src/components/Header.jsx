@@ -56,12 +56,13 @@ const Header = () => {
             </div>
           </div>
 
-          <button
-           
-            className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-6 py-2 rounded-full transition-colors"
-          >
-            Log In
-          </button>
+         <Link to="/sign-in">
+  <button
+    className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-6 py-2 rounded-full transition-colors"
+  >
+    Sign In
+  </button>
+</Link>
         </nav>
 
         {/* Mobile navigation */}
