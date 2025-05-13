@@ -48,7 +48,14 @@ export const signIn = async (req, res) => {
     // Generate JWT token
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    res.status(200).json({ message: "Login successful", token });
+    res.status(200).json({ message: "Login successful", token ,
+       user: {
+    email: user.email, // 👈 Add any other fields you want to expose
+    name: user.name,   // optional
+    
+   
+  }
+    });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

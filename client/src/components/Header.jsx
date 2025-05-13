@@ -1,12 +1,31 @@
 "use client"
 
-import { useState } from "react"
-import {  Menu, X } from "lucide-react"
+import { useState,useEffect } from "react"
+import { User, Menu, X } from "lucide-react"
 import {Link} from 'react-router-dom';
 import Logo from "./Logo"
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+const [email, setEmail] = useState("");
+
+  useEffect(() => {
+  const loadUser = () => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser && storedUser !== "undefined") {
+      const parsedUser = JSON.parse(storedUser);
+      if (parsedUser.email) {
+        setEmail(parsedUser.email);
+      }
+    }
+  };
+
+  loadUser(); // initial load
+
+  window.addEventListener("user-login", loadUser);
+  return () => window.removeEventListener("user-login", loadUser);
+}, []);
+
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -56,13 +75,33 @@ const Header = () => {
             </div>
           </div>
 
-         <Link to="/sign-in">
-  <button
-    className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-6 py-2 rounded-full transition-colors"
-  >
-    Sign In
-  </button>
-</Link>
+{email ? (
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 rounded-full bg-[#FF8E7E] text-white flex items-center justify-center">
+            {email.charAt(0).toUpperCase()}
+          </div>
+          <span className="text-sm">{email}</span>
+           <button
+      onClick={() => {
+        localStorage.removeItem("user");
+        window.location.reload(); // reload to update UI or use navigate('/')
+      }}
+       className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-6 py-2 rounded-full transition-colors"
+    >
+      Logout
+    </button>
+        </div>
+      ) : (
+        <Link to="/sign-in">
+             <button
+                onClick={() => {}}
+                className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-6 py-2 rounded-full transition-colors"
+              >
+              Sign In
+              </button>
+        </Link>
+      )}
+
         </nav>
 
         {/* Mobile navigation */}

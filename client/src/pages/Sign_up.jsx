@@ -27,7 +27,7 @@ export default function SignUp() {
 
       if (response.ok) {
        alert("Account created successfully!");
-        navigate("/signin");
+        navigate("/sign-in");
       } else {
         throw new Error(data.message || "Failed to create account");
       }
