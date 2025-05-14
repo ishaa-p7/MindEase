@@ -1,18 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-} from "recharts"
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
 import {
   Calendar,
   Clock,
@@ -26,7 +15,7 @@ import {
   Star,
   Coffee,
 } from "lucide-react"
-import { useUser } from '../context/UserContext';
+import { useUser } from '../context/UserContext'; 
 
 const MoodTracker = () => {
   // State for the mood form
@@ -37,34 +26,39 @@ const MoodTracker = () => {
   // State for mood data
   const [moodEntries, setMoodEntries] = useState([])
   const [loading, setLoading] = useState(true)
-  const [activeTab, setActiveTab] = useState("today")
-  const { userId } = useUser();
+  const [error, setError] = useState(null)
+  const [activeTab, setActiveTab] = useState("all")
+  const [submitting, setSubmitting] = useState(false)
 
-  // Fetch mood data from the backend
+   const { userId } = useUser();
+
+  // Hardcoded userId for demo purposes - in a real app, this would come from authentication
+  // Replace with actual user ID from your auth system
+
+  // Fetch mood data from API
   useEffect(() => {
-
-      if (!userId) return;
-
+    if (!userId) return;
     const fetchMoodData = async () => {
-  try {
-    const response = await fetch(`http://localhost:3000/api/moods/${userId}`);
-    const data = await response.json();
+      setLoading(true)
+      setError(null)
 
-    // Check if data is an array
-    if (Array.isArray(data)) {
-      setMoodEntries(data);
-    } else {
-      console.error("Unexpected response shape:", data);
-      setMoodEntries([]); // Fallback to empty array to avoid .filter crash
+      try {
+        const response = await fetch(`http://localhost:3000/api/moods/${userId}`)
+
+        if (!response.ok) {
+          throw new Error(`API error: ${response.status}`)
+        }
+
+        const result = await response.json()
+        // Access the data array from the response structure
+        setMoodEntries(result.data || [])
+      } catch (err) {
+        console.error("Error fetching mood data:", err)
+        setError("Failed to load your mood data. Please try again later.")
+      } finally {
+        setLoading(false)
+      }
     }
-  } catch (error) {
-    console.error("Error fetching mood data:", error);
-    setMoodEntries([]);
-  } finally {
-    setLoading(false);
-  }
-};
-
 
     fetchMoodData()
   }, [userId])
@@ -72,54 +66,57 @@ const MoodTracker = () => {
   // Function to handle mood submission
   const handleSubmitMood = async (e) => {
     e.preventDefault()
-if (!userId) return alert("Login required");
 
     if (!selectedMood) {
       alert("Please select a mood")
       return
     }
 
-    const newMoodEntry = {
-      mood: selectedMood,
-      note: note,
-      userId: userId, 
-    }
+    setSubmitting(true)
 
     try {
-      // Send POST request to create a new mood entry
+      // Create current date in ISO format
+      const currentDate = new Date().toISOString()
+
       const response = await fetch("http://localhost:3000/api/moods", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newMoodEntry),
+        body: JSON.stringify({
+          userId: userId, // Match the API's expected field
+          mood: selectedMood,
+          date: currentDate, // Include date as expected by the API
+          note: note,
+        }),
       })
 
-      const data = await response.json()
-  
-      // Add the new mood entry to the state
-      setMoodEntries([data, ...moodEntries])
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
+      }
+
+      const result = await response.json()
+      const newMoodEntry = result.data // Access the data field from the response
+
+      // Add the new entry to the state
+      setMoodEntries([newMoodEntry, ...moodEntries])
 
       // Reset form
       setSelectedMood("")
       setNote("")
       setShowMoodSelector(false)
-    } catch (error) {
-      console.error("Error posting new mood:", error)
+    } catch (err) {
+      console.error("Error submitting mood:", err)
+      alert("Failed to save your mood. Please try again.")
+    } finally {
+      setSubmitting(false)
     }
   }
 
-  // Function to delete a mood entry
-  const handleDeleteEntry = async (id) => {
-    try {
-      // Send DELETE request to remove the mood entry
-      await fetch(`/api/moods/${id}`, { method: "DELETE" })
-
-      // Remove the deleted entry from the state
-      setMoodEntries(moodEntries.filter((entry) => entry._id !== id))
-    } catch (error) {
-      console.error("Error deleting mood entry:", error)
-    }
+  // Function to handle delete UI (API not implemented yet)
+  const handleDeleteEntry = (id) => {
+    // Show message that delete API is not implemented yet
+    alert("Delete functionality will be implemented soon. The API is not available yet.")
   }
 
   // Function to get mood icon
@@ -162,8 +159,10 @@ if (!userId) return alert("Login required");
 
   // Prepare data for line chart
   const prepareLineChartData = () => {
+    if (!moodEntries.length) return []
+
     // Create a copy and sort by date
-    const sortedEntries = [...moodEntries].sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt))
+    const sortedEntries = [...moodEntries].sort((a, b) => new Date(a.date) - new Date(b.date))
 
     // Map mood to numeric value for the chart
     const moodValues = {
@@ -176,37 +175,11 @@ if (!userId) return alert("Login required");
     }
 
     return sortedEntries.map((entry) => ({
-      date: formatDate(entry.createdAt),
+      date: formatDate(entry.date),
       value: moodValues[entry.mood],
       mood: entry.mood,
     }))
   }
-
-  // Prepare data for pie chart
-  const preparePieChartData = () => {
-    const moodCounts = {
-      happy: 0,
-      sad: 0,
-      angry: 0,
-      anxious: 0,
-      excited: 0,
-      neutral: 0,
-    }
-
-    moodEntries.forEach((entry) => {
-      moodCounts[entry.mood]++
-    })
-
-    return Object.keys(moodCounts)
-      .map((mood) => ({
-        name: mood,
-        value: moodCounts[mood],
-      }))
-      .filter((item) => item.value > 0)
-  }
-
-  // Colors for pie chart
-  const COLORS = ["#4CAF50", "#2196F3", "#F44336", "#FFC107", "#9C27B0", "#9E9E9E"]
 
   // Custom tooltip for line chart
   const CustomTooltip = ({ active, payload, label }) => {
@@ -236,6 +209,8 @@ if (!userId) return alert("Login required");
 
   // Filter entries based on active tab
   const getFilteredEntries = () => {
+    if (!moodEntries.length) return []
+
     const today = new Date()
     today.setHours(0, 0, 0, 0)
 
@@ -250,17 +225,17 @@ if (!userId) return alert("Login required");
     switch (activeTab) {
       case "today":
         return moodEntries.filter((entry) => {
-          const entryDate = new Date(entry.createdAt)
+          const entryDate = new Date(entry.date)
           return entryDate >= today
         })
       case "week":
         return moodEntries.filter((entry) => {
-          const entryDate = new Date(entry.createdAt)
+          const entryDate = new Date(entry.date)
           return entryDate >= weekAgo
         })
       case "month":
         return moodEntries.filter((entry) => {
-          const entryDate = new Date(entry.createdAt)
+          const entryDate = new Date(entry.date)
           return entryDate >= monthAgo
         })
       case "all":
@@ -271,7 +246,6 @@ if (!userId) return alert("Login required");
 
   const filteredEntries = getFilteredEntries()
   const lineChartData = prepareLineChartData()
-  const pieChartData = preparePieChartData()
 
   // Mood options
   const moodOptions = [
@@ -331,103 +305,176 @@ if (!userId) return alert("Login required");
           </div>
 
           <div className="mb-4">
-            <label className="block text-gray-700 mb-2">Notes</label>
+            <label className="block text-gray-700 mb-2">Add a note (optional)</label>
             <textarea
-              rows={3}
+              className="w-full border border-gray-300 rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-[#FF8E7E]"
+              rows="3"
+              placeholder="How are you feeling? What's on your mind?"
               value={note}
               onChange={(e) => setNote(e.target.value)}
-              className="w-full p-3 border border-gray-300 rounded-lg"
-              placeholder="Optional"
             ></textarea>
           </div>
 
           <button
             type="submit"
-            className="w-full py-3 bg-[#FF7A68] text-white rounded-lg font-semibold"
+            disabled={submitting}
+            className={`${
+              submitting ? "bg-gray-400" : "bg-[#FF8E7E] hover:bg-[#FF7A68]"
+            } text-white px-6 py-2 rounded-lg transition-colors flex items-center`}
           >
-            Save Mood
+            {submitting ? (
+              <>
+                <span className="mr-2">Saving...</span>
+                <div className="animate-spin h-4 w-4 border-2 border-white rounded-full border-t-transparent"></div>
+              </>
+            ) : (
+              "Save Mood"
+            )}
           </button>
         </form>
       </div>
 
-      {/* Mood Stats and Graphs */}
-      {loading ? (
-        <div>Loading...</div>
-      ) : (
-        <>
-          {/* Mood Pie Chart */}
-          <div className="bg-white p-6 mb-8 rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Mood Distribution</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={pieChartData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  innerRadius="40%"
-                  outerRadius="70%"
-                  paddingAngle={5}
-                  isAnimationActive={false}
-                >
-                  {pieChartData.map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                  ))}
-                </Pie>
-                <Tooltip />
-              </PieChart>
-            </ResponsiveContainer>
+      {/* Mood Analytics */}
+      <div className="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Mood Analytics</h2>
+
+       {/* Time period tab - only 'all' shown */}
+<div className="flex mb-6 border-b">
+  <button
+    className={`px-4 py-2 capitalize ${
+      activeTab === "all"
+        ? "border-b-2 border-[#FF8E7E] text-[#FF8E7E] font-medium"
+        : "text-gray-600 hover:text-gray-800"
+    }`}
+    onClick={() => setActiveTab("all")}
+  >
+    all
+  </button>
+</div>
+
+
+        {loading ? (
+          <div className="flex justify-center items-center h-64">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FF8E7E]"></div>
           </div>
-
-          {/* Mood Line Chart */}
-          <div className="bg-white p-6 mb-8 rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Mood Over Time</h2>
-            <ResponsiveContainer width="100%" height={300}>
-              <LineChart data={lineChartData}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="date" />
-                <YAxis />
-                <Tooltip content={<CustomTooltip />} />
-                <Line
-                  type="monotone"
-                  dataKey="value"
-                  stroke="#FF7A68"
-                  activeDot={{ r: 8 }}
-                  dot={false}
-                />
-              </LineChart>
-            </ResponsiveContainer>
+        ) : error ? (
+          <div className="text-center py-12">
+            <p className="text-red-500">{error}</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="mt-4 bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-4 py-2 rounded-lg"
+            >
+              Try Again
+            </button>
           </div>
-
-          {/* Mood Entries List */}
-          <div className="bg-white p-6 rounded-xl shadow-sm">
-            <h2 className="text-xl font-semibold text-gray-800 mb-4">Your Mood History</h2>
-
-            {filteredEntries.map((entry) => (
-              <div
-                key={entry._id}
-                className="flex justify-between items-center py-3 border-b border-gray-200"
-              >
-                <div className="flex items-center">
-                  {getMoodIcon(entry.mood, 30)}
-                  <div className="ml-4">
-                    <p className="text-lg font-semibold">{entry.mood}</p>
-                    <p className="text-gray-500 text-sm">{formatDate(entry.createdAt)}</p>
-                    <p className="text-gray-700 text-sm">{entry.note}</p>
+        ) : (
+          <>
+            {filteredEntries.length === 0 ? (
+              <div className="text-center py-12">
+                <p className="text-gray-500">No mood data available for this period.</p>
+              </div>
+            ) : (
+              <div>
+                {/* Line Chart */}
+                <div className="bg-[#FFF5F1] p-4 rounded-lg">
+                  <h3 className="text-lg font-medium mb-4 text-gray-800">Mood Over Time</h3>
+                  <div className="h-64">
+                    <ResponsiveContainer width="100%" height="100%">
+                      <LineChart data={lineChartData} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+                        <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
+                        <XAxis dataKey="date" stroke="#6B7280" tick={{ fontSize: 12 }} />
+                        <YAxis
+                          stroke="#6B7280"
+                          tick={{ fontSize: 12 }}
+                          domain={[0, 5]}
+                          ticks={[0, 1, 2, 3, 4, 5]}
+                          tickFormatter={(value) => {
+                            const moodLabels = {
+                              0: "Angry",
+                              1: "Sad",
+                              2: "Anxious",
+                              3: "Neutral",
+                              4: "Excited",
+                              5: "Happy",
+                            }
+                            return moodLabels[value]
+                          }}
+                        />
+                        <Tooltip content={<CustomTooltip />} />
+                        <Line
+                          type="monotone"
+                          dataKey="value"
+                          stroke="#FF8E7E"
+                          strokeWidth={2}
+                          dot={{ stroke: "#FF8E7E", strokeWidth: 2, r: 4, fill: "white" }}
+                          activeDot={{ r: 6, fill: "#FF8E7E" }}
+                        />
+                      </LineChart>
+                    </ResponsiveContainer>
                   </div>
                 </div>
-                <button
-                  onClick={() => handleDeleteEntry(entry._id)}
-                  className="text-red-500 hover:text-red-700"
-                >
-                  <Trash2 size={20} />
-                </button>
               </div>
-            ))}
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Mood History */}
+      <div className="bg-white rounded-xl shadow-sm p-6">
+        <h2 className="text-xl font-semibold mb-4 text-gray-800">Mood History</h2>
+
+        {loading ? (
+          <div className="flex justify-center items-center h-32">
+            <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-[#FF8E7E]"></div>
           </div>
-        </>
-      )}
+        ) : error ? (
+          <div className="text-center py-8">
+            <p className="text-red-500">{error}</p>
+          </div>
+        ) : (
+          <>
+            {filteredEntries.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-500">No mood entries found for this period.</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {filteredEntries.map((entry) => (
+                  <div
+                    key={entry._id}
+                    className="border border-gray-200 rounded-lg p-4 hover:shadow-sm transition-shadow"
+                  >
+                    <div className="flex justify-between items-start">
+                      <div className="flex items-center">
+                        <div className="p-2 rounded-full bg-[#FFE6E2]">{getMoodIcon(entry.mood)}</div>
+                        <div className="ml-3">
+                          <p className="font-medium capitalize text-gray-800">{entry.mood}</p>
+                          <div className="flex items-center text-sm text-gray-500 mt-1">
+                            <Calendar size={14} className="mr-1" />
+                            <span className="mr-3">{formatDate(entry.date)}</span>
+                            <Clock size={14} className="mr-1" />
+                            <span>{formatTime(entry.date)}</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <button onClick={() => handleDeleteEntry(entry._id)} className="text-gray-400 hover:text-red-500">
+                        <Trash2 size={18} />
+                      </button>
+                    </div>
+
+                    {entry.note && (
+                      <div className="mt-3 pl-12">
+                        <p className="text-gray-600">{entry.note}</p>
+                      </div>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        )}
+      </div>
     </div>
   )
 }
