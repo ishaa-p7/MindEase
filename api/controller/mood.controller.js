@@ -30,3 +30,28 @@ export const addMood = async (req, res) => {
     res.status(500).json({ error: 'Failed to add mood' });
   }
 };
+
+// DELETE a mood entry by ID
+export const deleteMood = async (req, res) => {
+  const { id } = req.params;
+
+
+  try {
+    const mood = await Mood.findById(id);
+
+    if (!mood) {
+      return res.status(404).json({ error: 'Mood not found' });
+    }
+
+
+    await Mood.findByIdAndDelete(id);
+
+    res.status(200).json({
+      message: 'Mood deleted successfully',
+      data: mood,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to delete mood' });
+  }
+};
+

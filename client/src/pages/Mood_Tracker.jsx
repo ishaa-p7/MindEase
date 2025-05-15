@@ -114,10 +114,26 @@ const MoodTracker = () => {
   }
 
   // Function to handle delete UI (API not implemented yet)
-  const handleDeleteEntry = (id) => {
-    // Show message that delete API is not implemented yet
-    alert("Delete functionality will be implemented soon. The API is not available yet.")
+ const handleDeleteEntry = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this mood entry?")) return;
+
+  try {
+    const response = await fetch(`http://localhost:3000/api/moods/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to delete the mood entry");
+    }
+
+    // Update UI by filtering out the deleted entry
+    setMoodEntries((prevEntries) => prevEntries.filter((entry) => entry._id !== id));
+  } catch (error) {
+    console.error("Delete error:", error);
+    alert("Failed to delete the mood entry. Please try again.");
   }
+};
+
 
   // Function to get mood icon
   const getMoodIcon = (mood, size = 24) => {
