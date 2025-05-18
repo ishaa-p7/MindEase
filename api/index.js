@@ -4,6 +4,8 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import moodRoutes from './routes/mood.route.js';
 import authRoutes from './routes/auth.route.js'
+import quizRoutes from './routes/quiz.route.js';
+import { seedQuizzes } from './utils/seed.js';
 
 dotenv.config();
 
@@ -15,19 +17,19 @@ app.use(cors());
 
 app.use('/api/moods', moodRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/quiz', quizRoutes);
 
-mongoose.
-connect(process.env.MONGO).then(
-    ()=>{console.log('connected');     
-    })
-    .catch((err)=>{
-        console.log(err);
+mongoose.connect(process.env.MONGO)
+  .then(async () => {
+    console.log('✅ MongoDB connected');
+
+    await seedQuizzes();
+
+    app.listen(3000, () => {
+      console.log('🚀 Server running on port 3000');
     });
-
-
-
-app.listen(3000,()=>{
-    console.log('Server running.');
-});
-
+  })
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err);
+  });
  
