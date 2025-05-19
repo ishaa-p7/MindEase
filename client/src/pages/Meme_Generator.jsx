@@ -92,55 +92,63 @@ const MemeGenerator = () => {
   }
 
   // Generate meme using imgflip API
-  const generateMeme = async () => {
-    if (!selectedTemplate && !customImage) {
-      setError("Please select a template or upload an image")
-      return
-    }
+ const generateMeme = async () => {
+  if (!selectedTemplate && !customImage) {
+    setError("Please select a template or upload an image")
+    return
+  }
+
+  setIsGenerating(true)
+  setError(null)
+
+  try {
+    let response
 
     if (selectedTemplate) {
-      // Generate meme using imgflip API
-      setIsGenerating(true)
-      setError(null)
-
-      try {
-        const params = new URLSearchParams({
+      // Call your own backend here
+      response = await fetch("http://localhost:3000/api/meme/generate", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
           template_id: selectedTemplate.id,
           text0: topText,
           text1: bottomText,
-          username: "YOUR_IMGFLIP_USERNAME", // Replace with your actual credentials
-          password: "YOUR_IMGFLIP_PASSWORD", // Replace with your actual credentials
-        })
+        }),
+      })
 
-        const res = await fetch(`https://api.imgflip.com/caption_image?${params}`)
-        const data = await res.json()
+      const data = await response.json()
 
-        if (data.success) {
-          setMemeUrl(data.data.url)
-          // Add to history
-          const newMeme = {
-            id: Date.now(),
-            url: data.data.url,
-            topText,
-            bottomText,
-            templateName: selectedTemplate.name,
-            date: new Date().toISOString(),
-          }
-          setMemeHistory([newMeme, ...memeHistory.slice(0, 9)]) // Keep only 10 most recent
-        } else {
-          setError(data.error_message || "Failed to generate meme. Try again later.")
+      if (response.ok && data.url) {
+        setMemeUrl(data.url)
+
+        const newMeme = {
+          id: Date.now(),
+          url: data.url,
+          topText,
+          bottomText,
+          templateName: selectedTemplate.name,
+          date: new Date().toISOString(),
         }
-      } catch (err) {
-        console.error("Error generating meme:", err)
-        setError("Network error. Please check your connection and try again.")
-      } finally {
-        setIsGenerating(false)
+
+        setMemeHistory([newMeme, ...memeHistory.slice(0, 9)])
+      } else {
+        setError(data.error || "Meme generation failed")
       }
     } else if (customImage) {
-      // Generate meme using canvas for custom images
       generateCustomMeme()
+      return
     }
+  } catch (error) {
+    console.error("Error generating meme:", error)
+    setError("Server error. Please try again.")
+  } finally {
+    setIsGenerating(false)
   }
+}
+
+
 
   // Generate custom meme using canvas
   const generateCustomMeme = () => {
