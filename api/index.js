@@ -7,7 +7,7 @@ import authRoutes from './routes/auth.route.js'
 import quizRoutes from './routes/quiz.route.js';
 import { seedQuizzes } from './utils/seed.js';
 import psychiatristRoutes from './routes/psychiatrist.route.js';
-
+import memeRouter from './routes/meme.route.js'
 dotenv.config();
 
 
@@ -20,6 +20,7 @@ app.use('/api/moods', moodRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
 app.use('/api/psychiatrists', psychiatristRoutes);
+app.use('/api/meme', memeRouter);
 
 mongoose.connect(process.env.MONGO)
   .then(async () => {
