@@ -6,6 +6,7 @@ import moodRoutes from './routes/mood.route.js';
 import authRoutes from './routes/auth.route.js'
 import quizRoutes from './routes/quiz.route.js';
 import { seedQuizzes } from './utils/seed.js';
+import psychiatristRoutes from './routes/psychiatrist.route.js';
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(cors());
 app.use('/api/moods', moodRoutes);
 app.use('/api/auth', authRoutes);
 app.use('/api/quiz', quizRoutes);
+app.use('/api/psychiatrists', psychiatristRoutes);
 
 mongoose.connect(process.env.MONGO)
   .then(async () => {

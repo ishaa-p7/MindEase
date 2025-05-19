@@ -55,7 +55,7 @@ const [email, setEmail] = useState("");
           <Link to="/quiz" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
             Quiz
           </Link>
-          <Link href="/help" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
+          <Link to="/help" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
             Help Support
           </Link>
 
