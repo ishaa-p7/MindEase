@@ -1,4 +1,4 @@
-"use client"
+
 
 import { useState, useRef, useEffect } from "react"
 import { Play, Pause, Volume2, VolumeX, Moon, Wind, CloudRain, Music } from "lucide-react"
@@ -133,23 +133,36 @@ const RelaxPage = () => {
   }, [isTimerRunning, timer])
 
   const handlePlaySound = (sound) => {
-    if (audioRef.current) {
-      audioRef.current.pause()
-    }
-
-    // In a real app, you would have actual audio files with paths
-    // For example: `/sounds/${sound._id}.mp3`
-    audioRef.current = new Audio("/placeholder.mp3")
-    audioRef.current.loop = true
-    audioRef.current.volume = isMuted ? 0 : volume
-
-    setCurrentSound(sound)
-    setBreathingPhase(null)
-    setIsPlaying(true)
-    audioRef.current.play().catch((error) => {
-      console.error("Error playing audio:", error)
-    })
+  // If the same sound is clicked again, toggle play/pause
+  if (currentSound?._id === sound._id) {
+    togglePlayPause()
+    return
   }
+
+  // Pause and reset any current audio
+  if (audioRef.current) {
+    audioRef.current.pause()
+    audioRef.current = null
+  }
+
+  // Create new audio instance
+ 
+  const audio = new Audio(`/sounds/${sound.filename}`)
+   
+  audio.loop = true
+  audio.volume = isMuted ? 0 : volume
+
+  // Play new sound
+  audio.play().then(() => {
+    setCurrentSound(sound)
+    setIsPlaying(true)
+    audioRef.current = audio
+    setBreathingPhase(null) // Stop breathing exercise if running
+  }).catch(err => {
+    console.error("Error playing audio:", err)
+  })
+}
+
 
   const startBreathingExercise = (exercise) => {
     // Stop any playing audio
@@ -196,31 +209,34 @@ const RelaxPage = () => {
     setBreathingCount(0)
   }
 
-  const togglePlayPause = () => {
-    if (isPlaying) {
-      audioRef.current?.pause()
-    } else {
-      audioRef.current?.play().catch((error) => {
-        console.error("Error playing audio:", error)
-      })
-    }
-    setIsPlaying(!isPlaying)
+ const togglePlayPause = () => {
+  if (!audioRef.current) return
+  if (isPlaying) {
+    audioRef.current.pause()
+  } else {
+    audioRef.current.play().catch(err => console.error("Playback error:", err))
   }
+  setIsPlaying(!isPlaying)
+}
 
-  const handleVolumeChange = (e) => {
-    const newVolume = Number.parseFloat(e.target.value)
-    setVolume(newVolume)
-    if (audioRef.current) {
-      audioRef.current.volume = isMuted ? 0 : newVolume
-    }
+ const handleVolumeChange = (e) => {
+  const newVolume = parseFloat(e.target.value)
+  setVolume(newVolume)
+  if (audioRef.current) {
+    audioRef.current.volume = isMuted ? 0 : newVolume
   }
+}
 
-  const toggleMute = () => {
-    setIsMuted(!isMuted)
-    if (audioRef.current) {
-      audioRef.current.volume = !isMuted ? 0 : volume
-    }
+const toggleMute = () => {
+  const newMute = !isMuted
+  setIsMuted(newMute)
+  if (audioRef.current) {
+    audioRef.current.volume = newMute ? 0 : volume
   }
+}
+
+
+  
 
   const startTimer = (minutes) => {
     setTimer(minutes * 60)
@@ -529,28 +545,8 @@ const RelaxPage = () => {
             )}
           </div>
 
-          {/* Track Your Progress Section */}
-          <div className="bg-gradient-to-r from-[#FF8E7E] to-[#FFAA9D] rounded-xl p-8 text-white">
-            <div className="flex flex-col md:flex-row items-center">
-              <div className="md:w-2/3 mb-6 md:mb-0 md:pr-8">
-                <h3 className="text-2xl font-bold mb-4">Track Your Relaxation Journey</h3>
-                <p className="mb-6">
-                  Regular relaxation practice can significantly improve your mental well-being. Keep track of your
-                  sessions to build a consistent habit and see your progress over time.
-                </p>
-                <button className="bg-white text-[#FF8E7E] hover:bg-gray-100 px-6 py-3 rounded-full font-medium transition-colors">
-                  Start Your Relaxation Journal
-                </button>
-              </div>
-              <div className="md:w-1/3 flex justify-center">
-                <img
-                  src="/placeholder.svg?height=150&width=150"
-                  alt="Relaxation tracker illustration"
-                  className="rounded-lg"
-                />
-              </div>
-            </div>
-          </div>
+        
+         
         </div>
       </div>
     </div>
