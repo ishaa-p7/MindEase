@@ -103,12 +103,10 @@ const Footer = () => {
               © {new Date().getFullYear()} MindEase. All rights reserved.
             </p>
             <div className="flex space-x-6">
-              <a href="#" className="text-white  hover:underline">
+              <Link href="/p" className="text-white  hover:underline">
                 Privacy Policy
-              </a>
-              <a href="#" className="text-white  hover:underline">
-                Terms of Service
-              </a>
+              </Link>
+              
               <Link to="/about" className="text-white  hover:underline">
                 About Us
               </Link>

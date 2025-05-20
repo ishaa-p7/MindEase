@@ -174,47 +174,49 @@ const Quiz = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8 bg-[#FFF5F1] min-h-screen">
-      <h1 className="text-3xl font-bold text-gray-800 mb-8">Mental Health Quizzes</h1>
+   <div className="container mx-auto px-4 py-8 bg-[#FFF5F1] min-h-screen">
+  <h1 className="text-3xl font-bold text-gray-800 mb-8 text-center">
+    Mental Health Quizzes
+  </h1>
 
-      {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6">
-          <p>{error}</p>
-          <button onClick={() => window.location.reload()} className="mt-2 text-sm underline">
-            Try again
-          </button>
-        </div>
-      )}
+  {error && (
+    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded mb-6 text-center">
+      <p>{error}</p>
+      <button onClick={() => window.location.reload()} className="mt-2 text-sm underline">
+        Try again
+      </button>
+    </div>
+  )}
 
-      {loading ? (
-        // Loading state for initial quizzes fetch
-        <div className="flex justify-center items-center h-64">
-          <Loader2 className="h-12 w-12 text-[#FF8E7E] animate-spin" />
-          <span className="ml-3 text-gray-600">Loading quizzes...</span>
-        </div>
-      ) : !activeQuiz ? (
-        // Quiz selection screen
-        <div className="grid grid-cols-1 md:grid-cols-1 lg:grid-cols-1 gap-6">
-          {quizzes.map((quiz) => {
-            const colors = getQuizColor(quiz.title)
-            return (
-              <div
-                key={quiz._id}
-                className={`${colors.bg} ${colors.border} border rounded-xl p-6 hover:shadow-md transition-shadow cursor-pointer`}
-                onClick={() => startQuiz(quiz._id)}
-              >
-                <div className="flex items-center mb-4">
-                  {getQuizIcon(quiz.title)}
-                  <h2 className="text-xl font-semibold ml-3">{quiz.title}</h2>
-                </div>
-                <div className="flex justify-between items-center">
-                  <span className="text-sm text-gray-500">Take this assessment</span>
-                  <ChevronRight className="h-5 w-5 text-gray-400" />
-                </div>
+  {loading ? (
+    <div className="flex justify-center items-center h-64">
+      <Loader2 className="h-12 w-12 text-[#FF8E7E] animate-spin" />
+      <span className="ml-3 text-gray-600">Loading quizzes...</span>
+    </div>
+  ) : !activeQuiz ? (
+    <div className="flex justify-center">
+      <div className="grid grid-cols-1 gap-6 w-full max-w-5xl">
+        {quizzes.map((quiz) => {
+          const colors = getQuizColor(quiz.title);
+          return (
+            <div
+              key={quiz._id}
+              className={`${colors.bg} ${colors.border} border rounded-xl p-8 min-h-[180px] hover:shadow-md transition-shadow cursor-pointer`}
+              onClick={() => startQuiz(quiz._id)}
+            >
+              <div className="flex items-center mb-6">
+                {getQuizIcon(quiz.title)}
+                <h2 className="text-2xl font-semibold ml-4">{quiz.title}</h2>
               </div>
-            )
-          })}
-        </div>
+              <div className="flex justify-between items-center">
+                <span className="text-sm text-gray-500">Take this assessment</span>
+                <ChevronRight className="h-6 w-6 text-gray-400" />
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
       ) : quizLoading ? (
         // Loading state for specific quiz fetch
         <div className="flex justify-center items-center h-64">
