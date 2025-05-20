@@ -1,4 +1,5 @@
 import { Facebook, Twitter, Instagram, Linkedin } from "lucide-react"
+import { Link } from "react-router-dom"
 
 const Footer = () => {
   return (
@@ -7,25 +8,23 @@ const Footer = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           <div>
             <div className="flex items-center">
-              <div className="w-10 h-10 rounded-full bg-[#FF8E7E] flex items-center justify-center">
-                <span className="text-white font-bold text-xl">MW</span>
-              </div>
-              <span className="ml-2 text-xl font-semibold text-white">MindWell</span>
+              
+              <span className="ml-2 text-xl font-semibold text-white">MindEase</span>
             </div>
             <p className="mt-4 text-white">
-              MindWell is dedicated to improving mental health through innovative digital tools and resources.
+              MindEase is dedicated to improving mental health through innovative digital tools and resources.
             </p>
             <div className="mt-6 flex space-x-4">
-              <a href="#" className="text-white hover:text-[#FF8E7E]">
+              <a href="#" className="text-white  hover:underline">
                 <Facebook size={20} />
               </a>
-              <a href="#" className="text-white hover:text-[#FF8E7E]">
+              <a href="#" className="text-white  hover:underline">
                 <Twitter size={20} />
               </a>
-              <a href="#" className="text-white hover:text-[#FF8E7E]">
+              <a href="#" className="text-white  hover:underline">
                 <Instagram size={20} />
               </a>
-              <a href="#" className="text-white hover:text-[#FF8E7E]">
+              <a href="#" className="text-white  hover:underline">
                 <Linkedin size={20} />
               </a>
             </div>
@@ -35,24 +34,24 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4 text-white">Features</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#mood-tracker" className="text-white hover:text-[#FF8E7E]">
+                <Link to="/mood-tracker" className="text-white  hover:underline">
                   Mood Tracker
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#chatbot" className="text-white hover:text-[#FF8E7E]">
+                <Link to="/chatbot" className="text-white  hover:underline">
                   AI Chatbot
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#quiz" className="text-white hover:text-[#FF8E7E]">
+                <Link to="/quiz" className="text-white  hover:underline">
                   Quiz
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#support" className="text-white hover:text-[#FF8E7E]">
+                <Link to="/help" className="text-white  hover:underline">
                   Help Support
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -61,19 +60,19 @@ const Footer = () => {
             <h3 className="text-lg font-semibold mb-4 text-white">Fun</h3>
             <ul className="space-y-2">
               <li>
-                <a href="#memes" className="text-white hover:text-[#FF8E7E]">
+                <Link to="/meme-generator" className="text-white  hover:underline">
                   Meme Generator
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#relax" className="text-white hover:text-[#FF8E7E]">
+                <Link to="/relax" className="text-white  hover:underline">
                   Relax
-                </a>
+                </Link>
               </li>
               <li>
-                <a href="#groups" className="text-white hover:text-[#FF8E7E]">
+                <Link to="/groups" className="text-white  hover:underline">
                   Groups
-                </a>
+                </Link>
               </li>
             </ul>
           </div>
@@ -81,17 +80,16 @@ const Footer = () => {
           <div>
             <h3 className="text-lg font-semibold mb-4 text-white">Contact Us</h3>
             <address className="not-italic text-white">
-              <p>123 Wellness Street</p>
-              <p>Mindful City, MC 12345</p>
               <p className="mt-3">
                 Email:{" "}
-                <a href="mailto:info@mindwell.com" className="hover:text-[#FF8E7E]">
-                  info@mindwell.com
-                </a>
+                <a href="mailto:isha3603@gmail.com" className=" hover:underline">
+                  isha3603@gmail.com
+                  </a>
+
               </p>
               <p>
                 Phone:{" "}
-                <a href="tel:+1234567890" className="hover:text-[#FF8E7E]">
+                <a href="tel:+1234567890" >
                   (123) 456-7890
                 </a>
               </p>
@@ -102,18 +100,19 @@ const Footer = () => {
         <div className="border-t border-gray-800 pt-6 mt-6">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-white text-sm mb-4 md:mb-0">
-              © {new Date().getFullYear()} MindWell. All rights reserved.
+              © {new Date().getFullYear()} MindEase. All rights reserved.
             </p>
             <div className="flex space-x-6">
-              <a href="#" className="text-white hover:text-[#FF8E7E] text-sm">
+              <a href="#" className="text-white  hover:underline">
                 Privacy Policy
               </a>
-              <a href="#" className="text-white hover:text-[#FF8E7E] text-sm">
+              <a href="#" className="text-white  hover:underline">
                 Terms of Service
               </a>
-              <a href="#" className="text-white hover:text-[#FF8E7E] text-sm">
+              <a href="#" className="text-white  hover:underline">
                 About Us
               </a>
+              
             </div>
           </div>
         </div>

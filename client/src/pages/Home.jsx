@@ -1,7 +1,48 @@
-import FeatureCard from "../components/FeatureCard"
-import { Heart, MessageSquare, HelpCircle, Smile, Music, Users, BrainCircuit, Star, CheckCircle } from "lucide-react"
+"use client"
 
-const Home = () => {
+import { useState, useEffect } from "react"
+import { motion } from "framer-motion"
+import {
+  Heart,
+  MessageSquare,
+  HelpCircle,
+  Smile,
+  Music,
+  Users,
+  BrainCircuit,
+  CheckCircle,
+  ArrowRight,
+} from "lucide-react"
+import FeatureCard from "../components/FeatureCard"
+import { Link } from 'react-router-dom';
+
+
+
+const HomePage = () => {
+  const [activeTestimonial, setActiveTestimonial] = useState(0)
+
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+      },
+    },
+  }
+
+  const itemVariants = {
+    hidden: { y: 20, opacity: 0 },
+    visible: {
+      y: 0,
+      opacity: 1,
+      transition: {
+        duration: 0.5,
+      },
+    },
+  }
+
   const features = [
     {
       id: "mood-tracker",
@@ -9,6 +50,7 @@ const Home = () => {
       description: "Track your daily moods and emotions to identify patterns and improve well-being.",
       icon: <Heart className="h-12 w-12 text-[#FF8E7E]" />,
       color: "bg-[#FFE6E2]",
+      href: "/mood-tracker",
     },
     {
       id: "chatbot",
@@ -16,6 +58,7 @@ const Home = () => {
       description: "Talk to our AI assistant for emotional support and mental health guidance anytime.",
       icon: <MessageSquare className="h-12 w-12 text-[#FF8E7E]" />,
       color: "bg-[#FFF0EB]",
+      href: "/chatbot",
     },
     {
       id: "quiz",
@@ -23,6 +66,7 @@ const Home = () => {
       description: "Take our quizzes to learn more about yourself and your mental health needs.",
       icon: <BrainCircuit className="h-12 w-12 text-[#FF8E7E]" />,
       color: "bg-[#FFE6E2]",
+      href: "/quiz",
     },
     {
       id: "support",
@@ -30,6 +74,7 @@ const Home = () => {
       description: "Access resources and professional help when you need it most.",
       icon: <HelpCircle className="h-12 w-12 text-[#FF8E7E]" />,
       color: "bg-[#FFF0EB]",
+      href: "/help",
     },
     {
       id: "memes",
@@ -37,6 +82,7 @@ const Home = () => {
       description: "Create and share funny memes to brighten your day and others'.",
       icon: <Smile className="h-12 w-12 text-[#FF8E7E]" />,
       color: "bg-[#FFE6E2]",
+      href: "meme-generator",
     },
     {
       id: "relax",
@@ -44,6 +90,7 @@ const Home = () => {
       description: "Guided meditations, breathing exercises, and calming sounds to help you relax.",
       icon: <Music className="h-12 w-12 text-[#FF8E7E]" />,
       color: "bg-[#FFF0EB]",
+      href: "relax",
     },
     {
       id: "groups",
@@ -51,33 +98,7 @@ const Home = () => {
       description: "Connect with others facing similar challenges in a safe, supportive environment.",
       icon: <Users className="h-12 w-12 text-[#FF8E7E]" />,
       color: "bg-[#FFE6E2]",
-    },
-  ]
-
-  const testimonials = [
-    {
-      id: 1,
-      name: "Sarah Johnson",
-      role: "Teacher",
-      content:
-        "MindWell has completely transformed how I manage stress. The mood tracker helped me identify triggers I wasn't even aware of!",
-      rating: 5,
-    },
-    {
-      id: 2,
-      name: "Michael Chen",
-      role: "Software Developer",
-      content:
-        "The AI chatbot is available whenever I need someone to talk to. It's been a game-changer for my late-night anxiety.",
-      rating: 5,
-    },
-    {
-      id: 3,
-      name: "Priya Patel",
-      role: "Healthcare Worker",
-      content:
-        "After a long day at the hospital, the relaxation exercises help me unwind. I've recommended MindWell to all my colleagues.",
-      rating: 4,
+      href: "groups",
     },
   ]
 
@@ -108,154 +129,201 @@ const Home = () => {
     },
   ]
 
-  const faqs = [
-    {
-      id: 1,
-      question: "Is my data private and secure?",
-      answer:
-        "Yes, we take privacy seriously. All your personal data is encrypted and never shared with third parties without your explicit consent.",
-    },
-    {
-      id: 2,
-      question: "Can I use MindWell for free?",
-      answer:
-        "MindWell offers a free basic plan with limited features. Premium features are available with a subscription plan starting at $4.99/month.",
-    },
-    {
-      id: 3,
-      question: "Is the AI chatbot a replacement for therapy?",
-      answer:
-        "No, our AI chatbot provides support and guidance but is not a substitute for professional mental health care. We encourage seeking professional help when needed.",
-    },
-    {
-      id: 4,
-      question: "How often should I track my mood?",
-      answer:
-        "For best results, we recommend tracking your mood daily. However, any consistent schedule that works for you will provide valuable insights.",
-    },
-  ]
+
 
   return (
-    <div className="container mx-auto px-4 py-12">
+    <div className="overflow-hidden">
       {/* Hero Section */}
-      <section className="mb-16">
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Your Mental Wellness Journey</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Take care of your mind with our comprehensive tools designed to support your mental health.
-          </p>
+      <section className="relative py-20 md:py-28 overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute top-0 left-0 w-full h-full overflow-hidden z-0">
+          <div className="absolute top-0 right-0 w-96 h-96 bg-[#FFE6E2] rounded-full filter blur-3xl opacity-30 transform translate-x-1/2 -translate-y-1/2"></div>
+          <div className="absolute bottom-0 left-0 w-96 h-96 bg-[#FFF0EB] rounded-full filter blur-3xl opacity-30 transform -translate-x-1/2 translate-y-1/2"></div>
         </div>
 
-        <div className="bg-gradient-to-r from-[#FF8E7E] to-[#FFAA9D] rounded-2xl p-8 md:p-12 text-white mb-16">
-          <div className="flex flex-col md:flex-row items-center">
-            <div className="md:w-1/2 mb-8 md:mb-0">
-              <h2 className="text-3xl md:text-4xl font-bold mb-4">Begin Your Wellness Journey Today</h2>
-              <p className="text-lg mb-6">
-                Our app provides tools and resources to help you understand and improve your mental health.
-              </p>
-              <button className="bg-white text-[#FF8E7E] hover:bg-gray-100 px-8 py-3 rounded-full font-medium transition-colors">
-                Get Started
-              </button>
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="text-center max-w-4xl mx-auto mb-16"
+          >
+            <h1 className="text-5xl md:text-6xl font-bold text-gray-800 mb-6 leading-tight">
+              Your Mental <span className="text-[#FF8E7E]">Wellness</span> Journey Starts Here
+            </h1>
+            <p className="text-xl md:text-2xl text-gray-600 mb-10 leading-relaxed">
+              Take care of your mind with our comprehensive tools designed to support your mental health and well-being.
+            </p>
+            <div className="flex flex-col sm:flex-row justify-center gap-4">
+             <Link to="/sign-up">
+  <motion.button
+    whileHover={{ scale: 1.05 }}
+    whileTap={{ scale: 0.95 }}
+    className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-8 py-4 rounded-full font-medium transition-colors shadow-lg shadow-[#FF8E7E]/20"
+  >
+    Get Started Free
+  </motion.button>
+</Link>
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                className="bg-white text-[#FF8E7E] hover:bg-gray-50 px-8 py-4 rounded-full font-medium transition-colors border-2 border-[#FF8E7E] shadow-lg"
+              >
+                Watch Demo
+              </motion.button>
             </div>
-            <div className="md:w-1/2 flex justify-center">
-              <img
-                src="/placeholder.svg?height=300&width=300"
-                alt="Mental wellness illustration"
-                className="rounded-lg max-w-full h-auto"
-              />
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="relative max-w-5xl mx-auto"
+          >
+            <div className="absolute -top-6 -left-6 w-20 h-20 bg-[#FFE6E2] rounded-full z-0"></div>
+            <div className="absolute -bottom-6 -right-6 w-20 h-20 bg-[#FFF0EB] rounded-full z-0"></div>
+
+            <div className="relative z-10 bg-gradient-to-br from-[#FF8E7E] to-[#FFAA9D] rounded-3xl p-10 md:p-14 text-white shadow-2xl overflow-hidden">
+              <div className="absolute top-0 right-0 w-64 h-64 bg-white opacity-10 rounded-full transform translate-x-1/3 -translate-y-1/3"></div>
+              <div className="absolute bottom-0 left-0 w-64 h-64 bg-white opacity-10 rounded-full transform -translate-x-1/3 translate-y-1/3"></div>
+
+              <div className="flex flex-col md:flex-row items-center relative z-10">
+                <div className="md:w-1/2 mb-10 md:mb-0 md:pr-10">
+                  <h2 className="text-3xl md:text-4xl font-bold mb-6 leading-tight">
+                    Begin Your Wellness Journey Today
+                  </h2>
+                  <p className="text-lg md:text-xl mb-8 opacity-90 leading-relaxed">
+                    Our app provides tools and resources to help you understand and improve your mental health, one step
+                    at a time.
+                  </p>
+                  <Link to="/sign-up">
+                  <motion.button
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
+                    className="bg-white text-[#FF8E7E] hover:bg-gray-100 px-8 py-4 rounded-full font-medium transition-colors shadow-xl flex items-center"
+                  >
+                    Start Now
+                    <ArrowRight className="ml-2 h-5 w-5" />
+                  </motion.button>
+                  </Link>
+                </div>
+                <div className="md:w-1/2 flex justify-center">
+                  <img
+                    src="/placeholder.svg?height=400&width=400"
+                    alt="Mental wellness illustration"
+                    className="rounded-2xl max-w-full h-auto shadow-2xl transform hover:scale-105 transition-transform duration-500"
+                  />
+                </div>
+              </div>
             </div>
-          </div>
+          </motion.div>
         </div>
       </section>
 
       {/* Features Section */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Our Features</h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {features.map((feature) => (
-            <FeatureCard
-              key={feature.id}
-              id={feature.id}
-              title={feature.title}
-              description={feature.description}
-              icon={feature.icon}
-              color={feature.color}
-            />
-          ))}
+      <section className="py-20 md:py-28 bg-gradient-to-b from-white to-[#FFF5F1]">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">
+              Comprehensive Tools for Your Mental Wellness
+            </h2>
+            <p className="text-xl text-gray-600">
+              Explore our range of features designed to support every aspect of your mental health journey.
+            </p>
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+          >
+            {features.map((feature, index) => (
+              <motion.div key={feature.id} variants={itemVariants} custom={index}>
+                <FeatureCard
+                  id={feature.id}
+                  title={feature.title}
+                  description={feature.description}
+                  icon={feature.icon}
+                  color={feature.color}
+                  href={feature.href}
+                  animated={true}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* How It Works Section */}
-      <section className="mb-20 py-16 bg-[#FFF5F1] rounded-2xl">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">How It Works</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {howItWorks.map((step) => (
-              <div key={step.id} className="text-center">
-                <div className="bg-white w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4 shadow-sm">
-                  {step.icon}
-                </div>
-                <h3 className="text-xl font-semibold mb-2 text-gray-800">{step.title}</h3>
-                <p className="text-gray-600">{step.description}</p>
-              </div>
-            ))}
+      <section className="py-20 md:py-28 relative overflow-hidden">
+        {/* Background Elements */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-1/4 right-0 w-96 h-96 bg-[#FFE6E2] rounded-full filter blur-3xl opacity-30 transform translate-x-1/2"></div>
+          <div className="absolute bottom-1/4 left-0 w-96 h-96 bg-[#FFF0EB] rounded-full filter blur-3xl opacity-30 transform -translate-x-1/2"></div>
+        </div>
+
+        <div className="container mx-auto px-4 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center max-w-3xl mx-auto mb-16"
+          >
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800 mb-6">How It Works</h2>
+            <p className="text-xl text-gray-600">
+              Our simple process helps you improve your mental wellness in just a few steps.
+            </p>
+          </motion.div>
+
+          <div className="relative">
+            {/* Connection Line */}
+            <div className="hidden lg:block absolute top-1/2 left-0 right-0 h-1 bg-gradient-to-r from-[#FFE6E2] via-[#FF8E7E] to-[#FFE6E2] transform -translate-y-1/2 z-0"></div>
+
+            <motion.div
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true }}
+              className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 relative z-10"
+            >
+              {howItWorks.map((step, index) => (
+                <motion.div
+                  key={step.id}
+                  variants={itemVariants}
+                  custom={index}
+                  className="bg-white rounded-2xl p-8 text-center shadow-xl hover:shadow-2xl transition-shadow duration-300 transform hover:-translate-y-2"
+                >
+                  <div className="relative mb-6">
+                    <div className="absolute inset-0 bg-[#FFE6E2] rounded-full opacity-30 animate-pulse"></div>
+                    <div className="bg-white w-20 h-20 rounded-full flex items-center justify-center mx-auto shadow-md relative z-10">
+                      {step.icon}
+                      <div className="absolute -top-2 -right-2 w-8 h-8 bg-[#FF8E7E] rounded-full flex items-center justify-center text-white font-bold">
+                        {step.id}
+                      </div>
+                    </div>
+                  </div>
+                  <h3 className="text-xl font-semibold mb-4 text-gray-800">{step.title}</h3>
+                  <p className="text-gray-600 leading-relaxed">{step.description}</p>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
-      {/* Testimonials Section */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">What Our Users Say</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          {testimonials.map((testimonial) => (
-            <div key={testimonial.id} className="bg-white p-6 rounded-xl shadow-sm">
-              <div className="flex mb-4">
-                {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="h-5 w-5 text-yellow-400 fill-current" />
-                ))}
-              </div>
-              <p className="text-gray-600 mb-4">"{testimonial.content}"</p>
-              <div>
-                <p className="font-semibold text-gray-800">{testimonial.name}</p>
-                <p className="text-gray-500 text-sm">{testimonial.role}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+     
 
-      {/* FAQ Section */}
-      <section className="mb-20">
-        <h2 className="text-3xl font-bold text-center mb-12 text-gray-800">Frequently Asked Questions</h2>
-        <div className="max-w-3xl mx-auto">
-          {faqs.map((faq) => (
-            <div key={faq.id} className="mb-6 border-b border-gray-200 pb-6 last:border-0">
-              <h3 className="text-xl font-semibold mb-2 text-gray-800">{faq.question}</h3>
-              <p className="text-gray-600">{faq.answer}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* CTA Section */}
-      <section className="mb-12">
-        <div className="bg-[#FFE6E2] rounded-2xl p-8 md:p-12 text-center">
-          <h2 className="text-3xl font-bold mb-4 text-gray-800">Ready to Start Your Wellness Journey?</h2>
-          <p className="text-lg mb-8 text-gray-600 max-w-2xl mx-auto">
-            Join thousands of users who have improved their mental well-being with MindWell.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <button className="bg-[#FF8E7E] hover:bg-[#FF7A68] text-white px-8 py-3 rounded-full font-medium transition-colors">
-              Sign Up Free
-            </button>
-            <button className="bg-white text-[#FF8E7E] hover:bg-gray-100 px-8 py-3 rounded-full font-medium transition-colors border border-[#FF8E7E]">
-              Learn More
-            </button>
-          </div>
-        </div>
-      </section>
     </div>
   )
 }
 
-export default Home
+export default HomePage
