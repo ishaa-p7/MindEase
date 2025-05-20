@@ -108,60 +108,7 @@ const RelaxPage = () => {
     },
   ]
 
-  const guidedMeditations = [
-    {
-      id: 1,
-      name: "Body Scan Meditation",
-      description: "A gentle journey through your body to release tension",
-      duration: "10 minutes",
-      benefits: "Reduces physical tension and increases body awareness",
-      image: "/placeholder.svg?height=120&width=200",
-      bgColor: "bg-[#FFE6E2]",
-    },
-    {
-      id: 2,
-      name: "Loving-Kindness Meditation",
-      description: "Cultivate feelings of compassion for yourself and others",
-      duration: "15 minutes",
-      benefits: "Increases positive emotions and feelings of connection",
-      image: "/placeholder.svg?height=120&width=200",
-      bgColor: "bg-[#FFF0EB]",
-    },
-    {
-      id: 3,
-      name: "Mindful Awareness",
-      description: "Focus on the present moment with acceptance",
-      duration: "12 minutes",
-      benefits: "Improves focus and reduces rumination",
-      image: "/placeholder.svg?height=120&width=200",
-      bgColor: "bg-[#FFE6E2]",
-    },
-    {
-      id: 4,
-      name: "Sleep Meditation",
-      description: "Gentle guidance to help you drift into restful sleep",
-      duration: "20 minutes",
-      benefits: "Improves sleep quality and helps with insomnia",
-      image: "/placeholder.svg?height=120&width=200",
-      bgColor: "bg-[#FFF0EB]",
-    },
-  ]
-
-  useEffect(() => {
-    return () => {
-      // Clean up when component unmounts
-      if (audioRef.current) {
-        audioRef.current.pause()
-        audioRef.current = null
-      }
-      if (timerRef.current) {
-        clearInterval(timerRef.current)
-      }
-      if (breathingRef.current) {
-        clearInterval(breathingRef.current)
-      }
-    }
-  }, [])
+ 
 
   useEffect(() => {
     if (isTimerRunning && timer > 0) {

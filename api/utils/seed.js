@@ -1,6 +1,6 @@
 import {Quiz} from '../models/quiz.model.js';
 import { Sound } from '../models/sound.js';
-
+import { BreathingExercise } from '../models/breathing.model.js';
 
 export const seedQuizzes = async () => {
   const existing = await Quiz.find();
@@ -277,4 +277,44 @@ export const seedSounds = async () => {
   ]);
 
   console.log('✅ Sounds seeded successfully');
+};
+
+export const seedBreathingExercises = async () => {
+  const existing = await BreathingExercise.find();
+  if (existing.length > 0) return;
+
+  await BreathingExercise.insertMany([
+    {
+      name: "4-7-8 Breathing",
+      description: "Inhale for 4 seconds, hold for 7 seconds, exhale for 8 seconds",
+      benefits: "Reduces anxiety and helps with sleep",
+      steps: [
+        { action: "Inhale", duration: 4, instruction: "Breathe in slowly through your nose" },
+        { action: "Hold", duration: 7, instruction: "Hold your breath" },
+        { action: "Exhale", duration: 8, instruction: "Exhale completely through your mouth" },
+      ],
+    },
+    {
+      name: "Box Breathing",
+      description: "Equal duration for inhale, hold, exhale, and hold again",
+      benefits: "Improves concentration and performance under stress",
+      steps: [
+        { action: "Inhale", duration: 4, instruction: "Breathe in through your nose" },
+        { action: "Hold", duration: 4, instruction: "Hold your breath" },
+        { action: "Exhale", duration: 4, instruction: "Breathe out through your mouth" },
+        { action: "Hold", duration: 4, instruction: "Hold before breathing in again" },
+      ],
+    },
+    {
+      name: "Deep Belly Breathing",
+      description: "Slow, deep breaths focusing on expanding your diaphragm",
+      benefits: "Activates relaxation response and reduces stress",
+      steps: [
+        { action: "Inhale", duration: 5, instruction: "Breathe deeply into your belly" },
+        { action: "Exhale", duration: 5, instruction: "Slowly release all the air" },
+      ],
+    }
+  ]);
+
+  console.log("✅ Breathing exercises seeded successfully");
 };
