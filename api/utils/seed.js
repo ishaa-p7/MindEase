@@ -1,4 +1,6 @@
 import {Quiz} from '../models/quiz.model.js';
+import { Sound } from '../models/sound.js';
+
 
 export const seedQuizzes = async () => {
   const existing = await Quiz.find();
@@ -234,4 +236,45 @@ export const seedQuizzes = async () => {
   ]);
 
   console.log('✅ Quizzes seeded successfully');
+};
+
+
+export const seedSounds = async () => {
+  const existing = await Sound.find();
+  if (existing.length > 0) return;
+
+  await Sound.insertMany([
+    {
+      name: "Gentle Rain",
+      description: "Soft rainfall on leaves and rooftops",
+      duration: "Continuous",
+    },
+    {
+      name: "Ocean Waves",
+      description: "Waves gently crashing on the shore",
+      duration: "Continuous",
+    },
+    {
+      name: "Night Sounds",
+      description: "Crickets and gentle night ambience",
+      duration: "Continuous",
+    },
+    {
+      name: "Forest Birds",
+      description: "Birds chirping in a peaceful forest",
+      duration: "Continuous",
+    },
+    {
+      name: "Campfire",
+      description: "Crackling fire sounds",
+      duration: "Continuous",
+    },
+    {
+      name: "Gentle Piano",
+      description: "Soft piano melodies for relaxation",
+      duration: "Continuous",
+    }
+  ]);
+
+  console.log('✅ Sounds seeded successfully');
 };
