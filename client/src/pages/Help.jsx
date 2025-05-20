@@ -216,7 +216,7 @@ const HelpSupport = () => {
                   <input
                     type="text"
                     className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF8E7E]"
-                    placeholder="Enter your city (e.g., New York, Chicago)"
+                    placeholder="Enter your city (e.g., Indore,India)"
                     value={city}
                     onChange={(e) => setCity(e.target.value)}
                     required

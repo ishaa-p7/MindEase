@@ -12,6 +12,7 @@ import Sign_in from './pages/Sign_in'
 import Sign_up from './pages/Sign_up'
 import Header from './components/Header'
 import Footer from './components/Footer'
+import P from './pages/P'
 
 
 
@@ -31,6 +32,7 @@ function App() {
     <Route path="/mood-tracker" element={<Mood_Tracker/>}/>
     <Route path="/quiz" element={<Quiz/>}/>
     <Route path="/relax" element={<Relax/>}/>
+        <Route path="/p" element={<P/>}/>
    </Routes>
   
   <Footer/>

@@ -109,9 +109,9 @@ const Footer = () => {
               <a href="#" className="text-white  hover:underline">
                 Terms of Service
               </a>
-              <a href="#" className="text-white  hover:underline">
+              <Link to="/about" className="text-white  hover:underline">
                 About Us
-              </a>
+              </Link>
               
             </div>
           </div>

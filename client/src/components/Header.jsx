@@ -34,8 +34,9 @@ const [email, setEmail] = useState("");
   return (
     <header className="bg-white shadow-sm sticky top-0 z-50">
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
+        <Link to='/'>
         <Logo />
-
+</Link>
         {/* Mobile menu button */}
         <button className="md:hidden text-gray-700 focus:outline-none" onClick={toggleMenu}>
           {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -43,8 +44,8 @@ const [email, setEmail] = useState("");
 
         {/* Desktop navigation */}
         <nav className="hidden md:flex items-center space-x-6">
-          <Link to="/" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
-            Home
+          <Link to="/about" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
+            About Us
           </Link>
           <Link to="/mood-tracker" className="text-gray-700 hover:text-[#FF8E7E] transition-colors">
             Mood Tracker
