@@ -10,7 +10,7 @@ import psychiatristRoutes from './routes/psychiatrist.route.js';
 import memeRouter from './routes/meme.route.js'
 import soundRoutes from './routes/sound.route.js';
 import breathingRoute from './routes/breathing.route.js';
-
+import chatbotRoutes from "./routes/chatbot.route.js";
 
 dotenv.config();
 
@@ -27,6 +27,7 @@ app.use('/api/psychiatrists', psychiatristRoutes);
 app.use('/api/meme', memeRouter);
 app.use('/api/sounds', soundRoutes);
 app.use('/api/breathing', breathingRoute);
+app.use("/api", chatbotRoutes);
 
 mongoose.connect(process.env.MONGO)
   .then(async () => {
